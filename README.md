@@ -1,4 +1,6 @@
 # StlShowFunc
+_Showing Functions in the Status Line_
+
 Here is the community edtion of Dr Chip's StlShowFunc Vim plugin:  
 http://www.drchip.org/astronaut/vim/index.html#STLSHOWFUNC
 
