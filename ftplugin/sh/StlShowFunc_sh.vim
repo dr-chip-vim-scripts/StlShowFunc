@@ -22,8 +22,7 @@ fun! StlShowFunc_sh()
   let curlinenum = line(".")
 
   if   mode() != 'n'
-  \ || exists("w:bgn_range") && exists("w:end_range")
-  \ && w:bgn_range <= curlinenum && curlinenum <= w:end_range
+  \ || w:bgn_range <= curlinenum && curlinenum <= w:end_range
    " looks like we're in the same region -- no change
 "   call Dret("StlShowFunc_sh : no change")
    return
@@ -58,12 +57,6 @@ fun! StlShowFunc_sh()
   " set the status line and return
 "  call Dret("StlShowFunc_sh")
 endfun
-" ---------------------------------------------------------------------
-"  Set up CursorMoved autocmd
-augroup STLSHOWFUNC_SH
- au!
- exe "au CursorMoved ".expand("%")." call StlShowFunc_sh()"
-augroup END
 
 " ---------------------------------------------------------------------
 "  Enable FtPlugin: {{{1

@@ -56,9 +56,6 @@ endfun
 " ---------------------------------------------------------------------
 "  Enable FtPlugin: {{{1
 StlShowFunc dbg
-augroup STLSHOWFUNC
- au CursorMoved tmp* call StlShowFunc_dbg()
-augroup END
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

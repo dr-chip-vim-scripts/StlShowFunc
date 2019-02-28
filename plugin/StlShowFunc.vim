@@ -46,96 +46,106 @@ hi def User4 ctermfg=red   ctermbg=blue guifg=red   guibg=blue
 " ShowFuncSetup: toggle the display of containing function in the status line {{{2
 "    StlShowFunc  [lang] - turn showfunc on
 "    StlShowFunc!        - turn showfunc off
+"
+" TODO: separate Setup() function used by ftplugins and StlShowFunc command
 fun! s:ShowFuncSetup(mode,...)
-"  call Dfunc("ShowFuncSetup(mode=".a:mode.") a:0=".a:0)
+" call Dfunc( "ShowFuncSetup(mode=" . a:mode . ") a:0=" . a:0 )
 
-  if a:0 >= 1
-   let stlhandler= a:1
-"   call Decho("stlhandler<".stlhandler.">")
-  endif
-  if a:0 >= 2
-   let stlhandlerlist= a:2
-"   call Decho("stlhandlerlist<".stlhandlerlist.">")
-  elseif a:0 >= 1
-   let stlhandlerlist= "*.".a:1
-  else
-   let stlhandlerlist= "*.".&ft
-  endif
-  if !exists("s:showfunclang")
-   let s:showfunclang= []
-  endif
+  let stlhandler = a:0 ? a:1 : &ft
+" call Decho( "stlhandler<" . stlhandler . ">" )
 
   if a:mode
-   " turning StlShowFunc mode on
-   if a:0 == 0
-	echohl Error | echo "(ShowFuncSetup) missing stlhandler" | echohl None
-"	call Dret("ShowFuncSetup : missing stlhandler")
-	return
-   endif
-   " check if stlhandler has already been added to the autocmd list
-   if count(s:showfunclang,stlhandler) == 0
-   	let s:showfunc= 0
-	call add(s:showfunclang,stlhandler)
-"	call Decho('s:showfunclang'.string(s:showfunclang))
-   endif
-"   call Decho("s:showfunc ".(exists("s:showfunc")? "exists" : "doesn't exist"))
-"   call Decho("StlShowFunc_".stlhandler."() ".(exists("*StlShowFunc_".stlhandler)? "exists" : "doesn't exist"))
+    " turning StlShowFunc mode on
 
-   if (!exists("s:showfunc") || s:showfunc == 0) && exists("*StlShowFunc_".stlhandler)
-   	" enable StlShowFunc for stlhandler language
-"	call Decho("enabling StlShowFunc_".stlhandler)
-    let s:showfunc= 1
-"    call Decho("exe au CursorMoved *.".stlhandler." call StlShowFunc_".stlhandler."()")
-    augroup STLSHOWFUNC
-	 exe "au CursorMoved ".stlhandlerlist." call StlShowFunc_".stlhandler."()"
-    augroup END
-"	call Decho("exe call StlShowFunc_".stlhandler."()")
-	exe "call StlShowFunc_".stlhandler."()"
-   endif
+    " add buffer-local autocmd only once
+"   call Decho( "StlShowFunc_" . stlhandler . "() " . (exists( "*StlShowFunc_" . stlhandler )? "exists" : "doesn't exist") )
+    if empty(getbufvar('', 'autocommands_loaded')) && exists("*StlShowFunc_" . stlhandler)
 
-  else
+      " enable StlShowFunc for stlhandler language
+"     call Decho( "enabling StlShowFunc_" . stlhandler )
+"     call Decho( "exe au CursorMoved " . expand( "%" ) . " call StlShowFunc_" . stlhandler . "()" )
+      augroup STLSHOWFUNC
+        exe "au CursorMoved <buffer> call StlShowFunc_" . stlhandler . "()"
+
+        " NOTE: sometimes WinEnter executes twice (:bwipeout :next)
+        au WinEnter <buffer>
+          \ if !exists('w:stlshowfunc') |
+          \   let w:stlshowfunc = b:stlshowfunc |
+          \   let w:bgn_range = b:bgn_range |
+          \   let w:end_range = b:end_range |
+          \
+          \   unlet b:stlshowfunc b:bgn_range b:end_range |
+          \ endif
+
+        " NOTE: sometimes BufWinEnter executes twice
+        au BufWinEnter <buffer>
+          \ if exists('b:stlshowfunc') |
+          \   let w:stlshowfunc = b:stlshowfunc |
+          \   let w:bgn_range = b:bgn_range |
+          \   let w:end_range = b:end_range |
+          \
+          \   unlet b:stlshowfunc b:bgn_range b:end_range |
+          \ endif
+
+        au WinLeave,BufWinLeave <buffer>
+          \ let b:stlshowfunc = w:stlshowfunc |
+          \ let b:bgn_range = w:bgn_range |
+          \ let b:end_range = w:end_range
+
+        " needed if StlShowFunc was turned off in new buffer
+        au BufWinLeave <buffer>
+          \ let w:stlshowfunc = ''
+
+        au BufDelete <buffer>
+          \ au! STLSHOWFUNC * <buffer=abuf>
+          "\ au! STLSHOWFUNC * <buffer>
+      augroup END
+
+      let b:autocommands_loaded = 1
+
+      for win_id in win_findbuf(bufnr(''))
+        let [tabnr, winnr] = win_id2tabwin(win_id)
+
+        " reset the function
+        call settabwinvar(tabnr, winnr, 'stlshowfunc', '')
+        call settabwinvar(tabnr, winnr, 'bgn_range', 0)
+        call settabwinvar(tabnr, winnr, 'end_range', 0)
+
+        " set up the status line option to show the function
+        call settabwinvar(tabnr, winnr, '&stl', s:stlshowfunc_stlfunc)
+      endfor
+
+      " recalculate the function for current window
+      exe 'call StlShowFunc_' . stlhandler . '()'
+    endif
+
+  elseif exists('#STLSHOWFUNC')
    " turning StlShowFunc mode off
    " remove *all* StlShowFunc handlers
-   if exists("s:showfunc") && s:showfunc == 1
 "	call Decho("disabling all StlShowFunc_*")
 	let &l:stl=b:stlshowfunc_keep
     augroup STLSHOWFUNC
     	au!
     augroup END
     augroup! STLSHOWFUNC
-   endif
-   let s:showfunc     = 0
-   let s:showfunclang = []
+   unlet b:autocommands_loaded
   endif
 
-"  call Dret("ShowFuncSetup")
+" call Dret( "ShowFuncSetup" )
 endfun
 
 " ---------------------------------------------------------------------
 " StlShowFunc: {{{2
 fun! StlShowFunc()
-  if exists("s:stlshowfunc_{winnr()}")
-   return s:stlshowfunc_{winnr()}
-  endif
-  return ""
+  return w:stlshowfunc
 endfun
 
 " ---------------------------------------------------------------------
 " StlSetFunc: assigns a funcname to a window {{{2
-"             A funcname of "" clears the window-associated function name
 fun! StlSetFunc(funcname)
 "  call Dfunc("StlSetFunc(funcname<".a:funcname.">)")
-  if a:funcname == ""
-   " remove the funcname to window association
-   if exists("s:stlshowfunc_{winnr()}")
-   	unlet s:stlshowfunc_{winnr()}
-   endif
-  else
-   " set up the window to function name association
-   " also set up the status line option to show the function
-   let s:stlshowfunc_{winnr()} = a:funcname
-   let &l:stl                  = s:stlshowfunc_stlfunc
-  endif
+  " set up the window to function name association
+  let w:stlshowfunc = a:funcname
 "  call Dret("StlSetFunc")
 endfun
 

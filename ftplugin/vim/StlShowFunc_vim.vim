@@ -4,7 +4,8 @@
 " Version:  2e	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc_vim") || !exists("g:loaded_StlShowFunc")
+"  don't process command-line window
+if exists("b:loaded_StlShowFunc_vim") || !exists("g:loaded_StlShowFunc") || !empty( getcmdwintype() )
  finish
 endif
 let b:loaded_StlShowFunc_vim= "v2e"
