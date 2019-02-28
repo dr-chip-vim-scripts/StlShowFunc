@@ -18,20 +18,9 @@ com! -bang -nargs=* StlShowFunc	call s:ShowFuncSetup(<bang>1,<f-args>)
 
 " =====================================================================
 " Settings:
-if !exists("b:stlshowfunc_keep")
- let b:stlshowfunc_keep= &l:stl
-endif
-if !exists("g:stlshowfunc_stlnofunc")
- let s:stlshowfunc_stlnofunc= '%1*%f%2*  %{&kmp }%h%m%r%0*%=%-14.(%l,%c%V%)%< %P Win#%{winnr()} %{winwidth(0)}x%{winheight(0)} byte#%o %<%{strftime("%a %b %d, %Y, %I:%M:%S %p")}'
-else
- let s:stlshowfunc_stlnofunc= g:stlshowfunc_stlnofunc
-endif
-if !exists("g:stlshowfunc_stlfunc")
- let s:stlshowfunc_stlfunc = '%1*%f %3*%{StlShowFunc()}%2* %{&diff? "DIFF" : ""} %h%m%r%0* %= %-14.(%l,%c%V%)%< %P Win#%{winnr()} %{winwidth(0)}x%{winheight(0)} %<%{strftime("%a %b %d, %Y, %I:%M:%S %p")}'
-else
- let s:stlshowfunc_stlfunc = g:stlshowfunc_stlfunc
-endif
-let &l:stl=s:stlshowfunc_stlnofunc
+let s:stlshowfunc_stlfunc = exists("g:stlshowfunc_stlfunc") ?
+  \ g:stlshowfunc_stlfunc :
+  \ '%f %([%{StlShowFunc()}] %)%h%m%r%=%-14.(%l,%c%V%) %P'
 
 "  Set up User[1234] highlighting only if they're not already defined. {{{2
 hi def User1 ctermfg=white ctermbg=blue guifg=white guibg=blue
@@ -123,7 +112,7 @@ fun! s:ShowFuncSetup(mode,...)
    " turning StlShowFunc mode off
    " remove *all* StlShowFunc handlers
 "	call Decho("disabling all StlShowFunc_*")
-	let &l:stl=b:stlshowfunc_keep
+	setlocal stl&
     augroup STLSHOWFUNC
     	au!
     augroup END
