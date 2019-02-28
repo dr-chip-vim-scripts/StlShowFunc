@@ -109,15 +109,23 @@ fun! s:ShowFuncSetup(mode,...)
     endif
 
   elseif exists('#STLSHOWFUNC')
-   " turning StlShowFunc mode off
-   " remove *all* StlShowFunc handlers
-"	call Decho("disabling all StlShowFunc_*")
-	setlocal stl&
-    augroup STLSHOWFUNC
-    	au!
-    augroup END
+    " turning StlShowFunc mode off
+
+    " remove StlShowFunc handlers
+"   call Decho( "disabling all StlShowFunc_*" )
+    au! STLSHOWFUNC
     augroup! STLSHOWFUNC
-   unlet b:autocommands_loaded
+
+    " reset buffers-local 'autocommands_loaded' flag and status lines of theirs windows (if any)
+    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "autocommands_loaded"))' )
+      call setbufvar(bufnr, 'autocommands_loaded', 0)
+
+      for win_id in win_findbuf(bufnr)
+        let [tabnr, winnr] = win_id2tabwin(win_id)
+        call settabwinvar(tabnr, winnr, '&stl', '')
+      endfor
+    endfor
+
   endif
 
 " call Dret( "ShowFuncSetup" )
