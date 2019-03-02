@@ -60,11 +60,7 @@ endfun
 
 " ---------------------------------------------------------------------
 "  Enable FtPlugin: {{{1
-if has("fname_case")
- StlShowFunc cpp *.cpp,*.cc,*.c++,*.dxx,*.tcc,*.inl,*.C,*.H,*.hh
-else
- StlShowFunc cpp *.cpp,*.cc,*.c++,*.dxx,*.tcc,*.inl,*.hh
-endif
+call ShowFuncSetup('cpp')
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

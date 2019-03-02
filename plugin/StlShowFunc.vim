@@ -14,7 +14,13 @@ let g:loaded_StlShowFunc= "v2t"
 
 " =====================================================================
 " Commands: {{{1
-com! -bang -nargs=* StlShowFunc	call s:ShowFuncSetup(<bang>1,<f-args>)
+
+" ---------------------------------------------------------------------
+" StlShowFunc: toggle the display of containing function in the status line {{{2
+"    StlShowFunc  [lang] - turn showfunc on
+"    StlShowFunc!        - turn showfunc off
+"
+com -bang -nargs=* StlShowFunc	call s:command(<bang>1, <f-args>)
 
 " =====================================================================
 " Settings:
@@ -32,65 +38,79 @@ hi def User4 ctermfg=red   ctermbg=blue guifg=red   guibg=blue
 "  Functions: {{{1
 
 " ---------------------------------------------------------------------
-" ShowFuncSetup: toggle the display of containing function in the status line {{{2
-"    StlShowFunc  [lang] - turn showfunc on
-"    StlShowFunc!        - turn showfunc off
+" ShowFuncSetup: setup buffer for the function calculation {{{2
+"    stlhandler - language handler
 "
-" TODO: separate Setup() function used by ftplugins and StlShowFunc command
-fun! s:ShowFuncSetup(mode,...)
-" call Dfunc( "ShowFuncSetup(mode=" . a:mode . ") a:0=" . a:0 )
+fun ShowFuncSetup(stlhandler, ...)
+  let w:stlshowfunc = ''
+  let w:bgn_range = 0
+  let w:end_range = 0
 
-  let stlhandler = a:0 ? a:1 : &ft
-" call Decho( "stlhandler<" . stlhandler . ">" )
+  " set up the status line option to show the function
+  let &l:stl = s:stlshowfunc_stlfunc
+
+  " enable StlShowFunc for stlhandler language
+" call Decho( "enabling StlShowFunc_" . a:stlhandler )
+" call Decho( "exe au CursorMoved " . expand( "%" ) . " call StlShowFunc_" . a:stlhandler . "()" )
+  augroup STLSHOWFUNC
+    exe "au CursorMoved <buffer> call StlShowFunc_" . a:stlhandler . "()"
+
+    " NOTE: sometimes WinEnter executes twice (:bwipeout :next)
+    au WinEnter <buffer>
+      \ if !exists('w:stlshowfunc') |
+      \   let w:stlshowfunc = b:stlshowfunc |
+      \   let w:bgn_range = b:bgn_range |
+      \   let w:end_range = b:end_range |
+      \
+      \   unlet b:stlshowfunc b:bgn_range b:end_range |
+      \ endif
+
+    " NOTE: sometimes BufWinEnter executes twice
+    au BufWinEnter <buffer>
+      \ if exists('b:stlshowfunc') |
+      \   let w:stlshowfunc = b:stlshowfunc |
+      \   let w:bgn_range = b:bgn_range |
+      \   let w:end_range = b:end_range |
+      \
+      \   unlet b:stlshowfunc b:bgn_range b:end_range |
+      \ endif
+
+    au WinLeave,BufWinLeave <buffer>
+      \ let b:stlshowfunc = w:stlshowfunc |
+      \ let b:bgn_range = w:bgn_range |
+      \ let b:end_range = w:end_range
+
+    " needed if StlShowFunc was turned off in new buffer
+    au BufWinLeave <buffer>
+      \ let w:stlshowfunc = ''
+
+    au BufDelete <buffer>
+      \ au! STLSHOWFUNC * <buffer=abuf>
+      "\ au! STLSHOWFUNC * <buffer>
+  augroup END
+
+  let b:autocommands_loaded = 1
+
+" call Dret( "ShowFuncSetup" )
+endfun
+
+" ---------------------------------------------------------------------
+" command: set mode for all handled buffers {{{2
+"    mode - flag to turn showfunc on/off
+"
+fun s:command(mode, ...)
+" call Dfunc( "command(mode=" . a:mode . ") a:0=" . a:0 )
 
   if a:mode
     " turning StlShowFunc mode on
 
+    let stlhandler = a:0 ? a:1 : &ft
+" call Decho( "stlhandler<" . stlhandler . ">" )
+
     " add buffer-local autocmd only once
-"   call Decho( "StlShowFunc_" . stlhandler . "() " . (exists( "*StlShowFunc_" . stlhandler )? "exists" : "doesn't exist") )
-    if empty(getbufvar('', 'autocommands_loaded')) && exists("*StlShowFunc_" . stlhandler)
-
-      " enable StlShowFunc for stlhandler language
-"     call Decho( "enabling StlShowFunc_" . stlhandler )
-"     call Decho( "exe au CursorMoved " . expand( "%" ) . " call StlShowFunc_" . stlhandler . "()" )
-      augroup STLSHOWFUNC
-        exe "au CursorMoved <buffer> call StlShowFunc_" . stlhandler . "()"
-
-        " NOTE: sometimes WinEnter executes twice (:bwipeout :next)
-        au WinEnter <buffer>
-          \ if !exists('w:stlshowfunc') |
-          \   let w:stlshowfunc = b:stlshowfunc |
-          \   let w:bgn_range = b:bgn_range |
-          \   let w:end_range = b:end_range |
-          \
-          \   unlet b:stlshowfunc b:bgn_range b:end_range |
-          \ endif
-
-        " NOTE: sometimes BufWinEnter executes twice
-        au BufWinEnter <buffer>
-          \ if exists('b:stlshowfunc') |
-          \   let w:stlshowfunc = b:stlshowfunc |
-          \   let w:bgn_range = b:bgn_range |
-          \   let w:end_range = b:end_range |
-          \
-          \   unlet b:stlshowfunc b:bgn_range b:end_range |
-          \ endif
-
-        au WinLeave,BufWinLeave <buffer>
-          \ let b:stlshowfunc = w:stlshowfunc |
-          \ let b:bgn_range = w:bgn_range |
-          \ let b:end_range = w:end_range
-
-        " needed if StlShowFunc was turned off in new buffer
-        au BufWinLeave <buffer>
-          \ let w:stlshowfunc = ''
-
-        au BufDelete <buffer>
-          \ au! STLSHOWFUNC * <buffer=abuf>
-          "\ au! STLSHOWFUNC * <buffer>
-      augroup END
-
-      let b:autocommands_loaded = 1
+"   call Decho( "StlShowFunc_" . a:stlhandler . "() " . (exists( "*StlShowFunc_" . a:stlhandler )? "exists" : "doesn't exist") )
+    if empty(getbufvar('', 'autocommands_loaded')) && exists("*StlShowFunc_" . a:stlhandler)
+      call ShowFuncSetup(stlhandler)
 
       for win_id in win_findbuf(bufnr(''))
         let [tabnr, winnr] = win_id2tabwin(win_id)
@@ -127,8 +147,6 @@ fun! s:ShowFuncSetup(mode,...)
     endfor
 
   endif
-
-" call Dret( "ShowFuncSetup" )
 endfun
 
 " ---------------------------------------------------------------------
