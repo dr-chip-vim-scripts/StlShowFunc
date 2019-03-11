@@ -10,12 +10,12 @@ endif
 let b:loaded_StlShowFunc_mv= "v2e"
 
 " ---------------------------------------------------------------------
-" StlShowFunc_mv: show function name associated with the line under the cursor {{{1
+" StlShowFunc_maple: show function name associated with the line under the cursor {{{1
 "DechoTabOn
-fun! StlShowFunc_mv()
-"  call Dfunc("StlShowFunc_mv() line#".line(".")." mode=".mode())
+fun! StlShowFunc_maple()
+"  call Dfunc("StlShowFunc_maple() line#".line(".")." mode=".mode())
   if mode() != 'n'
-"   call Dret("StlShowFunc_mv")
+"   call Dret("StlShowFunc_maple")
    return
   endif
   if !exists("b:mvshowfunc_bgn")
@@ -49,7 +49,7 @@ fun! StlShowFunc_mv()
 
   if bgnfuncline == b:mvshowfunc_bgn && endfuncline == b:mvshowfunc_end
    " looks like we're in the same region -- no change
-"   call Dret("StlShowFunc_mv : no change")
+"   call Dret("StlShowFunc_maple : no change")
    return
   endif
 
@@ -73,12 +73,12 @@ fun! StlShowFunc_mv()
   endif
 
   " set the status line and return
-"  call Dret("StlShowFunc_mv")
+"  call Dret("StlShowFunc_maple")
 endfun
 
 " ---------------------------------------------------------------------
 "  Plugin Enabling: {{{1
-call ShowFuncSetup('mv')
+call ShowFuncSetup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

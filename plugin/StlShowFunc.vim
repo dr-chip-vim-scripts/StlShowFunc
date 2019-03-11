@@ -17,10 +17,10 @@ let g:loaded_StlShowFunc= "v2t"
 
 " ---------------------------------------------------------------------
 " StlShowFunc: toggle the display of containing function in the status line {{{2
-"    StlShowFunc  [lang] - turn showfunc on
-"    StlShowFunc!        - turn showfunc off
+"    StlShowFunc  - turn showfunc on
+"    StlShowFunc! - turn showfunc off
 "
-com -bang -nargs=* StlShowFunc	call s:command(<bang>1, <f-args>)
+com -bang StlShowFunc	call s:command(<bang>1)
 
 " =====================================================================
 " Settings:
@@ -39,9 +39,8 @@ hi def User4 ctermfg=red   ctermbg=blue guifg=red   guibg=blue
 
 " ---------------------------------------------------------------------
 " ShowFuncSetup: setup buffer for the function calculation {{{2
-"    stlhandler - language handler
 "
-fun ShowFuncSetup(stlhandler, ...)
+fun ShowFuncSetup(...)
   if !a:0
     " first run by ftplugin, needs init
     let w:stlshowfunc = ''
@@ -54,11 +53,11 @@ fun ShowFuncSetup(stlhandler, ...)
 
   let bufnr = a:0 ? a:1 : bufnr('')
 
-  " enable StlShowFunc for stlhandler language
-" call Decho( "enabling StlShowFunc_" . a:stlhandler )
-" call Decho( "exe au CursorMoved " . expand( "%" ) . " call StlShowFunc_" . a:stlhandler . "()" )
+  " enable StlShowFunc for &filetype language
+" call Decho( "enabling StlShowFunc_" . getbufvar(bufnr, '&ft') )
+" call Decho( "exe au CursorMoved " . expand( "%" ) . " call StlShowFunc_" . getbufvar(bufnr, '&ft') . "()" )
   augroup STLSHOWFUNC
-    exe 'au CursorMoved <buffer=' . bufnr . '> call StlShowFunc_' . a:stlhandler . '()'
+    exe 'au CursorMoved <buffer=' . bufnr . '> call StlShowFunc_' . getbufvar(bufnr, '&ft') . '()'
 
     " NOTE: sometimes WinEnter executes twice (:bwipeout :next)
     exe 'au WinEnter <buffer=' . bufnr . '>
@@ -102,19 +101,18 @@ endfun
 " command: set mode for all handled buffers {{{2
 "    mode - flag to turn showfunc on/off
 "
-fun s:command(mode, ...)
+fun s:command(mode)
 " call Dfunc( "command(mode=" . a:mode . ") a:0=" . a:0 )
 
   if a:mode
     " turning StlShowFunc mode on
 
-    let stlhandler = a:0 ? a:1 : &ft
-" call Decho( "stlhandler<" . stlhandler . ">" )
+" call Decho( "ft<" . &ft . ">" )
 
     " add buffer-local autocmd only once
-"   call Decho( "StlShowFunc_" . a:stlhandler . "() " . (exists( "*StlShowFunc_" . a:stlhandler )? "exists" : "doesn't exist") )
-    if empty(getbufvar('', 'autocommands_loaded')) && exists("*StlShowFunc_" . a:stlhandler)
-      call ShowFuncSetup(stlhandler)
+"   call Decho( "StlShowFunc_" . &ft . "() " . (exists( "*StlShowFunc_" . &ft )? "exists" : "doesn't exist") )
+    if empty(getbufvar('', 'autocommands_loaded')) && exists("*StlShowFunc_" . &ft)
+      call ShowFuncSetup()
 
       for win_id in win_findbuf(bufnr(''))
         let [tabnr, winnr] = win_id2tabwin(win_id)
@@ -129,7 +127,7 @@ fun s:command(mode, ...)
       endfor
 
       " recalculate the function for current window
-      exe 'call StlShowFunc_' . stlhandler . '()'
+      exe 'call StlShowFunc_' . &ft . '()'
     endif
 
   elseif exists('#STLSHOWFUNC')

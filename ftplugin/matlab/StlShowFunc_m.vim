@@ -10,12 +10,12 @@ endif
 let b:loaded_StlShowFunc_m= "v2d"
 
 " ---------------------------------------------------------------------
-" StlShowFunc_m: show function name associated with the line under the cursor {{{1
+" StlShowFunc_matlab: show function name associated with the line under the cursor {{{1
 "DechoTabOn
-fun! StlShowFunc_m()
-"  call Dfunc("StlShowFunc_m() line#".line(".")." mode=".mode())
+fun! StlShowFunc_matlab()
+"  call Dfunc("StlShowFunc_matlab() line#".line(".")." mode=".mode())
   if mode() != 'n'
-"   call Dret("StlShowFunc_m")
+"   call Dret("StlShowFunc_matlab")
    return
   endif
   if !exists("b:mshowfunc_bgn")
@@ -37,7 +37,7 @@ fun! StlShowFunc_m()
 
   if bgnfuncline == b:mshowfunc_bgn && endfuncline == b:mshowfunc_end
    " looks like we're in the same region -- no change
-"   call Dret("StlShowFunc_m : no change")
+"   call Dret("StlShowFunc_matlab : no change")
    return
   endif
 
@@ -61,12 +61,12 @@ fun! StlShowFunc_m()
   endif
 
   " set the status line and return
-"  call Dret("StlShowFunc_m")
+"  call Dret("StlShowFunc_matlab")
 endfun
 
 " ---------------------------------------------------------------------
 "  Plugin Enabling: {{{1
-call ShowFuncSetup('m')
+call ShowFuncSetup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

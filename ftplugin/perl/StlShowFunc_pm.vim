@@ -10,12 +10,12 @@ endif
 let b:loaded_StlShowFunc_pm= "v2e"
 
 " ---------------------------------------------------------------------
-" StlShowFunc_pm: show function name associated with the line under the cursor {{{1
+" StlShowFunc_perl: show function name associated with the line under the cursor {{{1
 "DechoTabOn
-fun! StlShowFunc_pm()
-"  call Dfunc("StlShowFunc_pm() line#".line(".")." mode=".mode())
+fun! StlShowFunc_perl()
+"  call Dfunc("StlShowFunc_perl() line#".line(".")." mode=".mode())
   if mode() != 'n'
-"   call Dret("StlShowFunc_pm")
+"   call Dret("StlShowFunc_perl")
    return
   endif
   if !exists("b:perlshowfunc_bgn")
@@ -45,7 +45,7 @@ fun! StlShowFunc_pm()
 
   if bgnfuncline == b:perlshowfunc_bgn && endfuncline == b:perlshowfunc_end
    " looks like we're in the same region -- no change
-"   call Dret("StlShowFunc_pm : no change")
+"   call Dret("StlShowFunc_perl : no change")
    return
   endif
 
@@ -66,12 +66,12 @@ fun! StlShowFunc_pm()
   endif
 
   " set the status line and return
-"  call Dret("StlShowFunc_pm")
+"  call Dret("StlShowFunc_perl")
 endfun
 
 " ---------------------------------------------------------------------
 "  Enable FtPlugin: {{{1
-call ShowFuncSetup('pm')
+call ShowFuncSetup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1
