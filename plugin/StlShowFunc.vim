@@ -42,54 +42,58 @@ hi def User4 ctermfg=red   ctermbg=blue guifg=red   guibg=blue
 "    stlhandler - language handler
 "
 fun ShowFuncSetup(stlhandler, ...)
-  let w:stlshowfunc = ''
-  let w:bgn_range = 0
-  let w:end_range = 0
+  if !a:0
+    " first run by ftplugin, needs init
+    let w:stlshowfunc = ''
+    let w:bgn_range = 0
+    let w:end_range = 0
 
-  " set up the status line option to show the function
-  let &l:stl = s:stlshowfunc_stlfunc
+    " set up the status line option to show the function
+    let &l:stl = s:stlshowfunc_stlfunc
+  endif
+
+  let bufnr = a:0 ? a:1 : bufnr('')
 
   " enable StlShowFunc for stlhandler language
 " call Decho( "enabling StlShowFunc_" . a:stlhandler )
 " call Decho( "exe au CursorMoved " . expand( "%" ) . " call StlShowFunc_" . a:stlhandler . "()" )
   augroup STLSHOWFUNC
-    exe "au CursorMoved <buffer> call StlShowFunc_" . a:stlhandler . "()"
+    exe 'au CursorMoved <buffer=' . bufnr . '> call StlShowFunc_' . a:stlhandler . '()'
 
     " NOTE: sometimes WinEnter executes twice (:bwipeout :next)
-    au WinEnter <buffer>
-      \ if !exists('w:stlshowfunc') |
+    exe 'au WinEnter <buffer=' . bufnr . '>
+      \ if !exists("w:stlshowfunc") |
       \   let w:stlshowfunc = b:stlshowfunc |
       \   let w:bgn_range = b:bgn_range |
       \   let w:end_range = b:end_range |
       \
       \   unlet b:stlshowfunc b:bgn_range b:end_range |
-      \ endif
+      \ endif'
 
     " NOTE: sometimes BufWinEnter executes twice
-    au BufWinEnter <buffer>
-      \ if exists('b:stlshowfunc') |
+    exe 'au BufWinEnter <buffer=' . bufnr . '>
+      \ if exists("b:stlshowfunc") |
       \   let w:stlshowfunc = b:stlshowfunc |
       \   let w:bgn_range = b:bgn_range |
       \   let w:end_range = b:end_range |
       \
       \   unlet b:stlshowfunc b:bgn_range b:end_range |
-      \ endif
+      \ endif'
 
-    au WinLeave,BufWinLeave <buffer>
+    exe 'au WinLeave,BufWinLeave <buffer=' . bufnr . '>
       \ let b:stlshowfunc = w:stlshowfunc |
       \ let b:bgn_range = w:bgn_range |
-      \ let b:end_range = w:end_range
+      \ let b:end_range = w:end_range'
 
     " needed if StlShowFunc was turned off in new buffer
-    au BufWinLeave <buffer>
-      \ let w:stlshowfunc = ''
+    "au BufWinLeave <buffer>
+    "  \ let w:stlshowfunc = ''
 
-    au BufDelete <buffer>
-      \ au! STLSHOWFUNC * <buffer=abuf>
-      "\ au! STLSHOWFUNC * <buffer>
+    exe 'au BufDelete <buffer=' . bufnr . '>
+      \ au! STLSHOWFUNC * <buffer=abuf>'
   augroup END
 
-  let b:autocommands_loaded = 1
+  call setbufvar(bufnr, 'autocommands_loaded', 1)
 
 " call Dret( "ShowFuncSetup" )
 endfun
