@@ -107,14 +107,11 @@ fun s:command(mode)
   if a:mode
     " turning StlShowFunc mode on
 
-" call Decho( "ft<" . &ft . ">" )
-
     " add buffer-local autocmd only once
-"   call Decho( "StlShowFunc_" . &ft . "() " . (exists( "*StlShowFunc_" . &ft )? "exists" : "doesn't exist") )
-    if empty(getbufvar('', 'autocommands_loaded')) && exists("*StlShowFunc_" . &ft)
-      call ShowFuncSetup()
+    for bufnr in filter( range(1, bufnr('$')), 'getbufvar(v:val, "autocommands_loaded")) == "0"' )
+      call ShowFuncSetup(bufnr)
 
-      for win_id in win_findbuf(bufnr(''))
+      for win_id in win_findbuf(bufnr)
         let [tabnr, winnr] = win_id2tabwin(win_id)
 
         " reset the function
@@ -127,8 +124,9 @@ fun s:command(mode)
       endfor
 
       " recalculate the function for current window
+"     call Decho( "call StlShowFunc_" . &ft . "()" )
       exe 'call StlShowFunc_' . &ft . '()'
-    endif
+    endfor
 
   elseif exists('#STLSHOWFUNC')
     " turning StlShowFunc mode off
