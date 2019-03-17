@@ -107,26 +107,30 @@ fun s:command(mode)
   if a:mode
     " turning StlShowFunc mode on
 
+    let win_saved = win_getid()
+
     " add buffer-local autocmd only once
     for bufnr in filter( range(1, bufnr('$')), 'getbufvar(v:val, "autocommands_loaded")) == "0"' )
       call ShowFuncSetup(bufnr)
 
       for win_id in win_findbuf(bufnr)
-        let [tabnr, winnr] = win_id2tabwin(win_id)
+        call win_gotoid(win_id)
 
         " reset the function
-        call settabwinvar(tabnr, winnr, 'stlshowfunc', '')
-        call settabwinvar(tabnr, winnr, 'bgn_range', 0)
-        call settabwinvar(tabnr, winnr, 'end_range', 0)
+        let w:stlshowfunc = ''
+        let w:bgn_range = 0
+        let w:end_range = 0
 
         " set up the status line option to show the function
-        call settabwinvar(tabnr, winnr, '&stl', s:stlshowfunc_stlfunc)
-      endfor
+        let &l:stl = s:stlshowfunc_stlfunc
 
-      " recalculate the function for current window
-"     call Decho( "call StlShowFunc_" . &ft . "()" )
-      exe 'call StlShowFunc_' . &ft . '()'
+        " recalculate the function for processed window
+"       call Decho( "call StlShowFunc_" . &ft . "()" )
+        exe 'call StlShowFunc_' . &ft . '()'
+      endfor
     endfor
+
+    win_gotoid(win_saved)
 
   elseif exists('#STLSHOWFUNC')
     " turning StlShowFunc mode off
