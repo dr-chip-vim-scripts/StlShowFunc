@@ -17,10 +17,8 @@ let g:loaded_StlShowFunc= "v2t"
 
 " ---------------------------------------------------------------------
 " StlShowFunc: toggle the display of containing function in the status line {{{2
-"    StlShowFunc  - turn showfunc on
-"    StlShowFunc! - turn showfunc off
 "
-com -bang StlShowFunc	call s:command(<bang>1)
+com StlShowFunc	call s:command()
 
 " =====================================================================
 " Settings:
@@ -98,13 +96,28 @@ fun ShowFuncSetup(...)
 endfun
 
 " ---------------------------------------------------------------------
-" command: set mode for all handled buffers {{{2
-"    mode - flag to turn showfunc on/off
+" command: toggle StlShowFunc mode for all handled buffers {{{2
 "
-fun s:command(mode)
-" call Dfunc( "command(mode=" . a:mode . ") a:0=" . a:0 )
+fun s:command()
+  if exists('#STLSHOWFUNC')
+    " turning StlShowFunc mode off
 
-  if a:mode
+    " remove StlShowFunc handlers
+"   call Decho( "disabling all StlShowFunc_*" )
+    au! STLSHOWFUNC
+    augroup! STLSHOWFUNC
+
+    " reset buffers-local 'autocommands_loaded' flag and status lines of theirs windows (if any)
+    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "autocommands_loaded"))' )
+      call setbufvar(bufnr, 'autocommands_loaded', 0)
+
+      for win_id in win_findbuf(bufnr)
+        let [tabnr, winnr] = win_id2tabwin(win_id)
+        call settabwinvar(tabnr, winnr, '&stl', '')
+      endfor
+    endfor
+
+  else
     " turning StlShowFunc mode on
 
     let win_saved = win_getid()
@@ -131,24 +144,6 @@ fun s:command(mode)
     endfor
 
     win_gotoid(win_saved)
-
-  elseif exists('#STLSHOWFUNC')
-    " turning StlShowFunc mode off
-
-    " remove StlShowFunc handlers
-"   call Decho( "disabling all StlShowFunc_*" )
-    au! STLSHOWFUNC
-    augroup! STLSHOWFUNC
-
-    " reset buffers-local 'autocommands_loaded' flag and status lines of theirs windows (if any)
-    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "autocommands_loaded"))' )
-      call setbufvar(bufnr, 'autocommands_loaded', 0)
-
-      for win_id in win_findbuf(bufnr)
-        let [tabnr, winnr] = win_id2tabwin(win_id)
-        call settabwinvar(tabnr, winnr, '&stl', '')
-      endfor
-    endfor
 
   endif
 endfun
