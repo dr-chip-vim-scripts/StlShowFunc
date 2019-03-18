@@ -9,10 +9,10 @@ if &diff
 endif
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc_sh") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
  finish
 endif
-let b:loaded_StlShowFunc_sh= "v2f"
+let b:loaded_StlShowFunc= "v2f"
 
 " ---------------------------------------------------------------------
 " StlShowFunc_sh: show function name associated with the line under the cursor {{{1

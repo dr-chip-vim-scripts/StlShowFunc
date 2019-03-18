@@ -4,10 +4,10 @@
 " Version:  2g	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Don't load if main StlShowFunc isn't available: {{{1
-if exists("b:loaded_StlShowFunc_c") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
  finish
 endif
-let b:loaded_StlShowFunc_c= "v2g"
+let b:loaded_StlShowFunc= "v2g"
 
 " ---------------------------------------------------------------------
 " StlShowFunc_c: show function name associated with the line under the cursor {{{1

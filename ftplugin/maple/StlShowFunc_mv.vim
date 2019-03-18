@@ -4,10 +4,10 @@
 " Version:  2e	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc_mv") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
  finish
 endif
-let b:loaded_StlShowFunc_mv= "v2e"
+let b:loaded_StlShowFunc= "v2e"
 
 " ---------------------------------------------------------------------
 " StlShowFunc_maple: show function name associated with the line under the cursor {{{1

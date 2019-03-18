@@ -5,10 +5,10 @@
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
 "  don't process command-line window
-if exists("b:loaded_StlShowFunc_vim") || !exists("g:loaded_StlShowFunc") || !empty( getcmdwintype() )
+if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc") || !empty( getcmdwintype() )
  finish
 endif
-let b:loaded_StlShowFunc_vim= "v2e"
+let b:loaded_StlShowFunc= "v2e"
 
 " ---------------------------------------------------------------------
 " StlShowFunc_vim: show function name associated with the line under the cursor {{{1

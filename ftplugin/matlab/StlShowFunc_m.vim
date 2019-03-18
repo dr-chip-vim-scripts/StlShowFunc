@@ -4,10 +4,10 @@
 " Version:  2d	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc_m") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
  finish
 endif
-let b:loaded_StlShowFunc_m= "v2d"
+let b:loaded_StlShowFunc= "v2d"
 
 " ---------------------------------------------------------------------
 " StlShowFunc_matlab: show function name associated with the line under the cursor {{{1

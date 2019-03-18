@@ -4,10 +4,10 @@
 " Version:  2h	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc_dbg") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
  finish
 endif
-let b:loaded_StlShowFunc_dbg= "v2h"
+let b:loaded_StlShowFunc= "v2h"
 "DechoRemOn
 
 " ---------------------------------------------------------------------

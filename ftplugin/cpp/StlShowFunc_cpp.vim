@@ -4,10 +4,10 @@
 " Version:  2k	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Don't load if main StlShowFunc isn't available: {{{1
-if exists("b:loaded_StlShowFunc_cpp") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
  finish
 endif
-let b:loaded_StlShowFunc_cpp= "v2k"
+let b:loaded_StlShowFunc= "v2k"
 
 " ---------------------------------------------------------------------
 " StlShowFunc_cpp: show function name associated with the line under the cursor {{{1

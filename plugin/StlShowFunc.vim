@@ -90,8 +90,6 @@ fun ShowFuncSetup(...)
       \ au! STLSHOWFUNC * <buffer=abuf>'
   augroup END
 
-  call setbufvar(bufnr, 'autocommands_loaded', 1)
-
 " call Dret( "ShowFuncSetup" )
 endfun
 
@@ -107,8 +105,8 @@ fun s:command()
     au! STLSHOWFUNC
     augroup! STLSHOWFUNC
 
-    " reset buffers-local 'autocommands_loaded' flag and status lines of theirs windows (if any)
-    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "autocommands_loaded"))' )
+    " reset status lines of buffer's windows (if any)
+    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' )
       for win_id in win_findbuf(bufnr)
         let [tabnr, winnr] = win_id2tabwin(win_id)
         call settabwinvar(tabnr, winnr, '&stl', '')
@@ -121,7 +119,7 @@ fun s:command()
     let win_saved = win_getid()
 
     " add buffer-local autocmd only once
-    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "autocommands_loaded"))' )
+    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' )
       call ShowFuncSetup(bufnr)
 
       for win_id in win_findbuf(bufnr)
