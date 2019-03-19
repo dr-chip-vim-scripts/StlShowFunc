@@ -13,14 +13,6 @@ set cpo&vim
 let g:loaded_StlShowFunc= "v2t"
 
 " =====================================================================
-" Commands: {{{1
-
-" ---------------------------------------------------------------------
-" StlShowFunc: toggle the display of containing function in the status line {{{2
-"
-com StlShowFunc	call s:command()
-
-" =====================================================================
 " Settings:
 let s:stlshowfunc_stlfunc = exists("g:stlshowfunc_stlfunc") ?
   \ g:stlshowfunc_stlfunc :
@@ -94,57 +86,6 @@ fun ShowFuncSetup(...)
 endfun
 
 " ---------------------------------------------------------------------
-" command: toggle StlShowFunc mode for all handled buffers {{{2
-"
-fun s:command()
-  if exists('#STLSHOWFUNC')
-    " turning StlShowFunc mode off
-
-    " remove StlShowFunc handlers
-"   call Decho( "disabling all StlShowFunc_*" )
-    au! STLSHOWFUNC
-    augroup! STLSHOWFUNC
-
-    " reset status lines of buffer's windows (if any)
-    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' )
-      for win_id in win_findbuf(bufnr)
-        let [tabnr, winnr] = win_id2tabwin(win_id)
-        call settabwinvar(tabnr, winnr, '&stl', '')
-      endfor
-    endfor
-
-  else
-    " turning StlShowFunc mode on
-
-    let win_saved = win_getid()
-
-    " add buffer-local autocmd only once
-    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' )
-      call ShowFuncSetup(bufnr)
-
-      for win_id in win_findbuf(bufnr)
-        call win_gotoid(win_id)
-
-        " reset the function
-        let w:stlshowfunc = ''
-        let w:bgn_range = 0
-        let w:end_range = 0
-
-        " set up the status line option to show the function
-        let &l:stl = s:stlshowfunc_stlfunc
-
-        " recalculate the function for processed window
-"       call Decho( "call StlShowFunc_" . &ft . "()" )
-        exe 'call StlShowFunc_' . &ft . '()'
-      endfor
-    endfor
-
-    win_gotoid(win_saved)
-
-  endif
-endfun
-
-" ---------------------------------------------------------------------
 " StlShowFunc: {{{2
 fun! StlShowFunc()
   return w:stlshowfunc
@@ -158,6 +99,59 @@ fun! StlSetFunc(funcname)
   let w:stlshowfunc = a:funcname
 "  call Dret("StlSetFunc")
 endfun
+
+" =====================================================================
+" Commands: {{{1
+
+" ---------------------------------------------------------------------
+" StlShowFunc: toggle the display of containing function in the status line {{{2
+"
+com StlShowFunc
+ \  if exists('#STLSHOWFUNC') |
+      "\ turning StlShowFunc mode off
+ \
+      "\ remove StlShowFunc handlers
+"\    call Decho( "disabling all StlShowFunc_*" )
+ \    exe 'au! STLSHOWFUNC' |
+ \    augroup! STLSHOWFUNC |
+ \
+      "\ reset status lines of buffer's windows (if any)
+ \    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' ) |
+ \      for win_id in win_findbuf(bufnr) |
+ \        let [tabnr, winnr] = win_id2tabwin(win_id) |
+ \        call settabwinvar(tabnr, winnr, '&stl', '') |
+ \      endfor |
+ \    endfor |
+ \
+ \  else |
+      "\ turning StlShowFunc mode on
+ \
+ \    let win_saved = win_getid() |
+ \
+      "\ add buffer-local autocmd only once
+ \    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' ) |
+ \      call ShowFuncSetup(bufnr) |
+ \
+ \      for win_id in win_findbuf(bufnr) |
+ \        call win_gotoid(win_id) |
+ \
+          "\ reset the function
+ \        let w:stlshowfunc = '' |
+ \        let w:bgn_range = 0 |
+ \        let w:end_range = 0 |
+ \
+          "\ set up the status line option to show the function
+ \        let &l:stl = s:stlshowfunc_stlfunc |
+ \
+          "\ recalculate the function for processed window
+"\        call Decho( "call StlShowFunc_" . &ft . "()" )
+ \        exe 'call StlShowFunc_' . &ft . '()' |
+ \      endfor |
+ \    endfor |
+ \
+ \    call win_gotoid(win_saved) |
+ \
+ \  endif
 
 " =====================================================================
 " Modelines: {{{1
