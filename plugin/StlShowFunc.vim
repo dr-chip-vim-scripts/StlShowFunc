@@ -120,6 +120,11 @@ com StlShowFunc
  \      for s:win_id in win_findbuf(s:bufnr) |
  \        let [s:tabnr, s:winnr] = win_id2tabwin(s:win_id) |
  \        call settabwinvar(s:tabnr, s:winnr, '&stl', '') |
+ \
+          "\ reset the function
+ \        call settabwinvar(s:tabnr, s:winnr, 'stlshowfunc', '') |
+ \        call settabwinvar(s:tabnr, s:winnr, 'bgn_range', 0) |
+ \        call settabwinvar(s:tabnr, s:winnr, 'end_range', 0) |
  \      endfor |
  \    endfor |
  \
@@ -134,11 +139,6 @@ com StlShowFunc
  \
  \      for s:win_id in win_findbuf(s:bufnr) |
  \        call win_gotoid(s:win_id) |
- \
-          "\ reset the function
- \        let w:stlshowfunc = '' |
- \        let w:bgn_range = 0 |
- \        let w:end_range = 0 |
  \
           "\ set up the status line option to show the function
  \        let &l:stl = s:stlshowfunc_stlfunc |
