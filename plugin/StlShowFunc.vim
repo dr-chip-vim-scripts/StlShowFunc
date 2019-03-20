@@ -116,24 +116,24 @@ com StlShowFunc
  \    augroup! STLSHOWFUNC |
  \
       "\ reset status lines of buffer's windows (if any)
- \    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' ) |
- \      for win_id in win_findbuf(bufnr) |
- \        let [tabnr, winnr] = win_id2tabwin(win_id) |
- \        call settabwinvar(tabnr, winnr, '&stl', '') |
+ \    for s:bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' ) |
+ \      for s:win_id in win_findbuf(s:bufnr) |
+ \        let [s:tabnr, s:winnr] = win_id2tabwin(s:win_id) |
+ \        call settabwinvar(s:tabnr, s:winnr, '&stl', '') |
  \      endfor |
  \    endfor |
  \
  \  else |
       "\ turning StlShowFunc mode on
  \
- \    let win_saved = win_getid() |
+ \    let s:win_saved = win_getid() |
  \
       "\ add buffer-local autocmd only once
- \    for bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' ) |
- \      call ShowFuncSetup(bufnr) |
+ \    for s:bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' ) |
+ \      call ShowFuncSetup(s:bufnr) |
  \
- \      for win_id in win_findbuf(bufnr) |
- \        call win_gotoid(win_id) |
+ \      for s:win_id in win_findbuf(s:bufnr) |
+ \        call win_gotoid(s:win_id) |
  \
           "\ reset the function
  \        let w:stlshowfunc = '' |
@@ -149,7 +149,7 @@ com StlShowFunc
  \      endfor |
  \    endfor |
  \
- \    call win_gotoid(win_saved) |
+ \    call win_gotoid(s:win_saved) |
  \
  \  endif
 
