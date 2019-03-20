@@ -18,9 +18,9 @@ fun! StlShowFunc_matlab()
 "   call Dret("StlShowFunc_matlab")
    return
   endif
-  if !exists("b:mshowfunc_bgn")
-   let b:mshowfunc_bgn= -2
-   let b:mshowfunc_end= -2
+  if !exists("b:showfunc_bgn")
+   let b:showfunc_bgn= -2
+   let b:showfunc_end= -2
   endif
 
   sil! keepj let bgnfuncline = search('^\s*function\>','Wbn')
@@ -32,17 +32,17 @@ fun! StlShowFunc_matlab()
   if getline(".") =~ '^\s*endfunction\>'
    let endfuncline= line(".")
   endif
-"  call Decho("previous bgn,end[".b:mshowfunc_bgn.",".b:mshowfunc_end."]")
+"  call Decho("previous bgn,end[".b:showfunc_bgn.",".b:showfunc_end."]")
 "  call Decho("current  bgn,end[".bgnfuncline.",".endfuncline."]")
 
-  if bgnfuncline == b:mshowfunc_bgn && endfuncline == b:mshowfunc_end
+  if bgnfuncline == b:showfunc_bgn && endfuncline == b:showfunc_end
    " looks like we're in the same region -- no change
 "   call Dret("StlShowFunc_matlab : no change")
    return
   endif
 
-  let            b:mshowfunc_bgn = bgnfuncline
-  let            b:mshowfunc_end = endfuncline
+  let            b:showfunc_bgn = bgnfuncline
+  let            b:showfunc_end = endfuncline
   sil! keepj let endprvfuncline  = search('^\s*endfunction\>','Wbn')
 "  call Decho("endprvfuncline=".endprvfuncline)
 

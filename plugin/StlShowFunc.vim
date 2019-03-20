@@ -130,6 +130,9 @@ com StlShowFunc
  \        call settabwinvar(s:tabnr, s:winnr, 'bgn_range', 0) |
  \        call settabwinvar(s:tabnr, s:winnr, 'end_range', 0) |
  \      endfor |
+ \
+        "\ FIXME: shouldn't be used by ftplugins
+ \      call setbufvar(s:bufnr, 'showfunc_bgn', 0) |
  \    endfor |
  \
  \  else |

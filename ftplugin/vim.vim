@@ -19,10 +19,10 @@ fun! StlShowFunc_vim()
 "   call Dret("StlShowFunc_vim")
    return
   endif
-  if !exists("b:vimshowfunc_bgn")
-   let b:vimshowfunc_bgn= -2
-   let b:vimshowfunc_end= -2
-"   call Decho("init b:vimshowfunc_bgn and b:vimshowfunc_end")
+  if !exists("b:showfunc_bgn")
+   let b:showfunc_bgn= -2
+   let b:showfunc_end= -2
+"   call Decho("init b:showfunc_bgn and b:showfunc_end")
   endif
 
   sil! keepj let bgnfuncline = search('^\s*fu\%[nction]\>','Wbn')
@@ -33,19 +33,19 @@ fun! StlShowFunc_vim()
   if getline(".") =~ '^\s*endf\%[unction]\>'
    let endfuncline= line(".")
   endif
-"  call Decho("previous bgn,end[".b:vimshowfunc_bgn.",".b:vimshowfunc_end."]")
+"  call Decho("previous bgn,end[".b:showfunc_bgn.",".b:showfunc_end."]")
 "  call Decho("current  bgn,end[".bgnfuncline.",".endfuncline."]")
-"  call Decho((bgnfuncline == b:vimshowfunc_bgn)? "[bgnfuncline".bgnfuncline."] == [b:vimshowfunc_bgn=".b:vimshowfunc_bgn."]" : "[bgnfuncline=".bgnfuncline."] != [b:vimshowfunc_bgn=".b:vimshowfunc_bgn."]")
-"  call Decho((endfuncline == b:vimshowfunc_end)? "[endfuncline".endfuncline."] == [b:vimshowfunc_end=".b:vimshowfunc_end."]" : "[endfuncline=".endfuncline."] != [b:vimshowfunc_end=".b:vimshowfunc_end."]")
+"  call Decho((bgnfuncline == b:showfunc_bgn)? "[bgnfuncline".bgnfuncline."] == [b:showfunc_bgn=".b:showfunc_bgn."]" : "[bgnfuncline=".bgnfuncline."] != [b:showfunc_bgn=".b:showfunc_bgn."]")
+"  call Decho((endfuncline == b:showfunc_end)? "[endfuncline".endfuncline."] == [b:showfunc_end=".b:showfunc_end."]" : "[endfuncline=".endfuncline."] != [b:showfunc_end=".b:showfunc_end."]")
 
-  if bgnfuncline == b:vimshowfunc_bgn && endfuncline == b:vimshowfunc_end
+  if bgnfuncline == b:showfunc_bgn && endfuncline == b:showfunc_end
    " looks like we're in the same region -- no change
 "   call Dret("StlShowFunc_vim : no change")
    return
   endif
 
-  let            b:vimshowfunc_bgn= bgnfuncline
-  let            b:vimshowfunc_end= endfuncline
+  let            b:showfunc_bgn= bgnfuncline
+  let            b:showfunc_end= endfuncline
   sil! keepj let endprvfuncline   = search('^\s*endf\%[unction]\>','Wbn')
 "  call Decho("[bgnfuncline=".bgnfuncline."]".((bgnfuncline < endprvfuncline)? "<" : "≮")."[endprvfuncline=".endprvfuncline."]")
 

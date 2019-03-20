@@ -20,8 +20,8 @@ fun! StlShowFunc_dbg()
   endif
 
   " initialization:
-  if !exists("b:dbgshowfunc_funcline")
-   let b:dbgshowfunc_funcline= -2
+  if !exists("b:showfunc_funcline")
+   let b:showfunc_funcline= -2
    let s:funcname            = ""
   endif
 
@@ -29,18 +29,18 @@ fun! StlShowFunc_dbg()
   let stopline= line(".") - 500
   if stopline <= 0 | let stopline= 1 | endif
   sil! keepj let [funcline,funccol] = searchpairpos('{$','','}\%(\~\d\+\)\=$','Wbn','',stopline)
-"  call Decho("funcline=".funcline." funccol=".funccol." b:dbgshowfunc_funcline=".b:dbgshowfunc_funcline." stopline=".stopline." curline=".line("."))
+"  call Decho("funcline=".funcline." funccol=".funccol." b:showfunc_funcline=".b:showfunc_funcline." stopline=".stopline." curline=".line("."))
 
   if funcline == 0 || funccol == 0
    " occurs when searchpairpos() fails
-   let b:dbgshowfunc_funcline= -2
+   let b:showfunc_funcline= -2
    call StlSetFunc("")
-"   call Dret("StlShowFunc_dbg : b:dbgshowfunc_funcline=".b:dbgshowfunc_funcline)
+"   call Dret("StlShowFunc_dbg : b:showfunc_funcline=".b:showfunc_funcline)
    return
   endif
 
-  if funcline != b:dbgshowfunc_funcline
-   let b:dbgshowfunc_funcline= funcline
+  if funcline != b:showfunc_funcline
+   let b:showfunc_funcline= funcline
    let funcname              = substitute(getline(funcline),'^\d*|*\(\h\w*\)(.*$','\1','e')
 "   call Decho("funcname<".funcname."> s:funcname<".s:funcname.">")
    if !exists("s:funcname") || funcname != s:funcname
@@ -50,7 +50,7 @@ fun! StlShowFunc_dbg()
   else
    let s:funcname= ""
   endif
-"  call Dret("StlShowFunc_dbg : b:dbgshowfunc_funcline=".b:dbgshowfunc_funcline)
+"  call Dret("StlShowFunc_dbg : b:showfunc_funcline=".b:showfunc_funcline)
 endfun
 
 " ---------------------------------------------------------------------

@@ -18,11 +18,11 @@ fun! StlShowFunc_cpp()
 "   call Dret("StlShowFunc_cpp")
    return
   endif
-  if !exists("b:cshowfunc_bgn")
-   let b:cshowfunc_bgn= -2
-   let b:cshowfunc_end= -2
+  if !exists("b:showfunc_bgn")
+   let b:showfunc_bgn= -2
+   let b:showfunc_end= -2
   endif
-"  call Decho("b:cshowfunc_bgn=".b:cshowfunc_bgn." b:cshowfunc_end=".b:cshowfunc_end)
+"  call Decho("b:showfunc_bgn=".b:showfunc_bgn." b:showfunc_end=".b:showfunc_end)
 
   keepj let swp= SaveWinPosn(0)
   while 1

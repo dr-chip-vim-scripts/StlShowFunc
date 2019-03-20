@@ -18,9 +18,9 @@ fun! StlShowFunc_c()
 "   call Dret("StlShowFunc_c")
    return
   endif
-  if !exists("b:cshowfunc_bgn")
-   let b:cshowfunc_bgn= -2
-   let b:cshowfunc_end= -2
+  if !exists("b:showfunc_bgn")
+   let b:showfunc_bgn= -2
+   let b:showfunc_end= -2
   endif
 
   keepjumps let bgnfuncline = search('^{\s*\(//.*$\|\/\*.*$\)\=','Wbn')
@@ -31,17 +31,17 @@ fun! StlShowFunc_c()
   if getline(".") =~ '^}$'
    let endfuncline= line(".")
   endif
-"  call Decho("previous bgn,end[".b:cshowfunc_bgn.",".b:cshowfunc_end."]")
+"  call Decho("previous bgn,end[".b:showfunc_bgn.",".b:showfunc_end."]")
 "  call Decho("current  bgn,end[".bgnfuncline.",".endfuncline."]")
 
-  if bgnfuncline == b:cshowfunc_bgn && endfuncline == b:cshowfunc_end
+  if bgnfuncline == b:showfunc_bgn && endfuncline == b:showfunc_end
    " looks like we're in the same region -- no change
 "   call Dret("StlShowFunc_c : no change")
    return
   endif
 
-  let b:cshowfunc_bgn= bgnfuncline
-  let b:cshowfunc_end= endfuncline
+  let b:showfunc_bgn= bgnfuncline
+  let b:showfunc_end= endfuncline
   keepjumps let endprvfuncline = search('^}$','Wbn')
 "  call Decho("endprvfuncline=".endprvfuncline)
 

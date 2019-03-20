@@ -18,9 +18,9 @@ fun! StlShowFunc_maple()
 "   call Dret("StlShowFunc_maple")
    return
   endif
-  if !exists("b:mvshowfunc_bgn")
-   let b:mvshowfunc_bgn= -2
-   let b:mvshowfunc_end= -2
+  if !exists("b:showfunc_bgn")
+   let b:showfunc_bgn= -2
+   let b:showfunc_end= -2
   endif
 
   if getline(".") =~ ':=\s*proc\s*('
@@ -44,17 +44,17 @@ fun! StlShowFunc_maple()
 	endif
    endif
   endif
-"  call Decho("previous bgn,end[".b:mvshowfunc_bgn.",".b:mvshowfunc_end."]")
+"  call Decho("previous bgn,end[".b:showfunc_bgn.",".b:showfunc_end."]")
 "  call Decho("current  bgn,end[".bgnfuncline.",".endfuncline."]")
 
-  if bgnfuncline == b:mvshowfunc_bgn && endfuncline == b:mvshowfunc_end
+  if bgnfuncline == b:showfunc_bgn && endfuncline == b:showfunc_end
    " looks like we're in the same region -- no change
 "   call Dret("StlShowFunc_maple : no change")
    return
   endif
 
-  let b:mvshowfunc_bgn     = bgnfuncline
-  let b:mvshowfunc_end     = endfuncline
+  let b:showfunc_bgn     = bgnfuncline
+  let b:showfunc_end     = endfuncline
   keepj let endprvfuncline = search('^\s*endf\%[unction]\>','Wbn')
 "  call Decho("endprvfuncline=".endprvfuncline)
 

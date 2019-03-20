@@ -18,9 +18,9 @@ fun! StlShowFunc_perl()
 "   call Dret("StlShowFunc_perl")
    return
   endif
-  if !exists("b:perlshowfunc_bgn")
-   let b:perlshowfunc_bgn= -2
-   let b:perlshowfunc_end= -2
+  if !exists("b:showfunc_bgn")
+   let b:showfunc_bgn= -2
+   let b:showfunc_end= -2
   endif
 
   if getline(".") =~ '^\s*sub\s'
@@ -40,17 +40,17 @@ fun! StlShowFunc_perl()
    	let endfuncline= bgnfuncline
    endif
   endif
-"  call Decho("previous bgn,end[".b:perlshowfunc_bgn.",".b:perlshowfunc_end."]")
+"  call Decho("previous bgn,end[".b:showfunc_bgn.",".b:showfunc_end."]")
 "  call Decho("current  bgn,end[".bgnfuncline.",".endfuncline."]")
 
-  if bgnfuncline == b:perlshowfunc_bgn && endfuncline == b:perlshowfunc_end
+  if bgnfuncline == b:showfunc_bgn && endfuncline == b:showfunc_end
    " looks like we're in the same region -- no change
 "   call Dret("StlShowFunc_perl : no change")
    return
   endif
 
-  let        b:perlshowfunc_bgn = bgnfuncline
-  let        b:perlshowfunc_end = endfuncline
+  let        b:showfunc_bgn = bgnfuncline
+  let        b:showfunc_end = endfuncline
   sil! keepj let endprvfuncline = search('^}$','Wbn')
 "  call Decho("endprvfuncline=".endprvfuncline)
 
