@@ -32,16 +32,16 @@ hi def User4 ctermfg=red   ctermbg=blue guifg=red   guibg=blue
 "
 fun ShowFuncSetup(...)
   if !a:0
-    " first run by ftplugin, needs init
-    let w:stlshowfunc = ''
-    let w:bgn_range = 0
-    let w:end_range = 0
-
+    " first run by ftplugin
     " set up the status line option to show the function
     let &l:stl = s:stlshowfunc_stlfunc
   endif
 
   let bufnr = a:0 ? a:1 : bufnr('')
+
+  call setbufvar(bufnr, 'stlshowfunc', '')
+  call setbufvar(bufnr, 'bgn_range', 0)
+  call setbufvar(bufnr, 'end_range', 0)
 
   " enable StlShowFunc for &filetype language
 " call Decho( "enabling StlShowFunc_" . getbufvar(bufnr, '&ft') )
