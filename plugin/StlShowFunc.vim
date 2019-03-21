@@ -67,6 +67,10 @@ fun ShowFuncSetup(...)
       \   let w:end_range = b:end_range |
       \
       \   unlet b:stlshowfunc b:bgn_range b:end_range |
+      \
+        "\ workaround for unloaded buffers without stl while switching StlShowFunc on
+      \ elseif empty(&l:stl) |
+      \   let &l:stl = s:stlshowfunc_stlfunc |
       \ endif'
 
     exe 'au WinLeave,BufWinLeave <buffer=' . bufnr . '>
