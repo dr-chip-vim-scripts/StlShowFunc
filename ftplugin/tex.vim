@@ -4,7 +4,7 @@
 " Version:  1a	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc")
  finish
 endif
 let b:loaded_StlShowFunc= "v1a"
@@ -47,7 +47,7 @@ fun! StlShowFunc_tex()
 "  call Decho("endprvfuncline=".endprvfuncline)
 
   if bgnfuncline < endprvfuncline || (endprvfuncline == 0 && bgnfuncline == 0)
-   call StlSetFunc("")
+   call ShowFunc#Set("")
   else
    " extract the section/title name from the bgnfuncline
    let title_line= getline(bgnfuncline)
@@ -55,9 +55,9 @@ fun! StlShowFunc_tex()
    if title_line =~ '\\\%(part\|chapter\|section\|subsubsection\|subsection\)\s*{'
 	let title= substitute(title_line,'^.*\\\%(part\|chapter\|section\|subsubsection\|subsection\)\s*{\([^}]\+\)}.*$','\1','')
 "    call Decho("title<".title.">")
-    call StlSetFunc(title)
+    call ShowFunc#Set(title)
    else
-    call StlSetFunc("")
+    call ShowFunc#Set("")
    endif
   endif
 
@@ -67,7 +67,7 @@ endfun
 
 " ---------------------------------------------------------------------
 "  Plugin Enabling: {{{1
-call ShowFuncSetup()
+call ShowFunc#Setup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

@@ -16,7 +16,7 @@ let g:loaded_StlShowFunc= "v2t"
 " Settings:
 let s:stlshowfunc_stlfunc = exists("g:stlshowfunc_stlfunc") ?
   \ g:stlshowfunc_stlfunc :
-  \ '%f %([%{StlShowFunc()}] %)%h%m%r%=%-14.(%l,%c%V%) %P'
+  \ '%f %([%{ShowFunc#Show()}] %)%h%m%r%=%-14.(%l,%c%V%) %P'
 
 "  Set up User[1234] highlighting only if they're not already defined. {{{2
 hi def User1 ctermfg=white ctermbg=blue guifg=white guibg=blue
@@ -30,7 +30,7 @@ hi def User4 ctermfg=red   ctermbg=blue guifg=red   guibg=blue
 " ---------------------------------------------------------------------
 " ShowFuncSetup: setup buffer for the function calculation {{{2
 "
-fun ShowFuncSetup(...)
+fun ShowFunc#Setup(...)
   if !a:0
     " first run by ftplugin
     " set up the status line option to show the function
@@ -91,13 +91,13 @@ endfun
 
 " ---------------------------------------------------------------------
 " StlShowFunc: {{{2
-fun! StlShowFunc()
+fun! ShowFunc#Show()
   return w:stlshowfunc
 endfun
 
 " ---------------------------------------------------------------------
 " StlSetFunc: assigns a funcname to a window {{{2
-fun! StlSetFunc(funcname)
+fun! ShowFunc#Set(funcname)
 "  call Dfunc("StlSetFunc(funcname<".a:funcname.">)")
   " set up the window to function name association
   let w:stlshowfunc = a:funcname
@@ -142,7 +142,7 @@ com StlShowFunc
  \
       "\ add buffer-local autocmd only once
  \    for s:bufnr in filter( range(1, bufnr('$')), '!empty(getbufvar(v:val, "loaded_StlShowFunc"))' ) |
- \      call ShowFuncSetup(s:bufnr) |
+ \      call ShowFunc#Setup(s:bufnr) |
  \
  \      for s:win_id in win_findbuf(s:bufnr) |
  \        call win_gotoid(s:win_id) |

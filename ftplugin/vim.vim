@@ -5,7 +5,7 @@
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
 "  don't process command-line window
-if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc") || !empty( getcmdwintype() )
+if exists("b:loaded_StlShowFunc") || !empty( getcmdwintype() )
  finish
 endif
 let b:loaded_StlShowFunc= "v2e"
@@ -50,19 +50,19 @@ fun! StlShowFunc_vim()
 "  call Decho("[bgnfuncline=".bgnfuncline."]".((bgnfuncline < endprvfuncline)? "<" : "≮")."[endprvfuncline=".endprvfuncline."]")
 
   if bgnfuncline < endprvfuncline || (endprvfuncline == 0 && bgnfuncline == 0)
-"   call Decho('calling StlSetFunc("") (case 1)')
-   call StlSetFunc("")
+"   call Decho('calling Set("") (case 1)')
+   call ShowFunc#Set("")
   else
    " extract the function name from the bgnfuncline
    let funcline= getline(bgnfuncline)
 "   call Decho("extract function name from bgnfuncline#".bgnfuncline."<".funcline.">")
    if funcline =~ '^\s*fu\%[nction]!\=\s\+\(\%([sS]:\|<[sS][iI][dD]>\)\=\h[a-zA-Z0-9_#]*\).\{-}$'
     let funcname= substitute(funcline,'^\s*fu\%[nction]!\=\s\+\(\%([sS]:\|<[sS][iI][dD]>\)\=\h[a-zA-Z0-9_#]*\).\{-}$','\1','')
-"	call Decho('calling StlSetFunc('.funcname.'()')
-    call StlSetFunc(funcname."()")
+"	call Decho('calling Set('.funcname.'()')
+    call ShowFunc#Set(funcname."()")
    else
-"    call Decho('calling StlSetFunc("") (case 2)')
-    call StlSetFunc("")
+"    call Decho('calling Set("") (case 2)')
+    call ShowFunc#Set("")
    endif
   endif
 
@@ -72,7 +72,7 @@ endfun
 
 " ---------------------------------------------------------------------
 "  Plugin Enabling: {{{1
-call ShowFuncSetup()
+call ShowFunc#Setup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

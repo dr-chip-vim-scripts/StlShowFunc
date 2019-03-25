@@ -4,7 +4,7 @@
 " Version:  2h	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc")
  finish
 endif
 let b:loaded_StlShowFunc= "v2h"
@@ -34,7 +34,7 @@ fun! StlShowFunc_dbg()
   if funcline == 0 || funccol == 0
    " occurs when searchpairpos() fails
    let b:showfunc_funcline= -2
-   call StlSetFunc("")
+   call ShowFunc#Set("")
 "   call Dret("StlShowFunc_dbg : b:showfunc_funcline=".b:showfunc_funcline)
    return
   endif
@@ -45,7 +45,7 @@ fun! StlShowFunc_dbg()
 "   call Decho("funcname<".funcname."> s:funcname<".s:funcname.">")
    if !exists("s:funcname") || funcname != s:funcname
 	let s:funcname= funcname
-	call StlSetFunc(funcname."()")
+	call ShowFunc#Set(funcname."()")
    endif
   else
    let s:funcname= ""
@@ -55,7 +55,7 @@ endfun
 
 " ---------------------------------------------------------------------
 "  Enable FtPlugin: {{{1
-call ShowFuncSetup()
+call ShowFunc#Setup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

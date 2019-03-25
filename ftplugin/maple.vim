@@ -4,7 +4,7 @@
 " Version:  2e	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc")
  finish
 endif
 let b:loaded_StlShowFunc= "v2e"
@@ -59,16 +59,16 @@ fun! StlShowFunc_maple()
 "  call Decho("endprvfuncline=".endprvfuncline)
 
   if bgnfuncline < endprvfuncline || (endprvfuncline == 0 && bgnfuncline == 0)
-   call StlSetFunc("")
+   call ShowFunc#Set("")
   else
    " extract the function name from the bgnfuncline
    let funcline= getline(bgnfuncline)
    if funcline =~ '^.\{-}:=\s*proc\s*('
    	let funcname= substitute(funcline,'^\s*\(\h\w*\)\s*:=\s*proc\s*(.*$','\1','')
 "   call Decho("funcname<".funcname.">")
-    call StlSetFunc(funcname."()")
+    call ShowFunc#Set(funcname."()")
    else
-    call StlSetFunc("")
+    call ShowFunc#Set("")
    endif
   endif
 
@@ -78,7 +78,7 @@ endfun
 
 " ---------------------------------------------------------------------
 "  Plugin Enabling: {{{1
-call ShowFuncSetup()
+call ShowFunc#Setup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

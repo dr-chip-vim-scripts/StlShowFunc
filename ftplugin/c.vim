@@ -4,7 +4,7 @@
 " Version:  2g	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Don't load if main StlShowFunc isn't available: {{{1
-if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc")
  finish
 endif
 let b:loaded_StlShowFunc= "v2g"
@@ -46,7 +46,7 @@ fun! StlShowFunc_c()
 "  call Decho("endprvfuncline=".endprvfuncline)
 
   if bgnfuncline < endprvfuncline || (endprvfuncline == 0 && bgnfuncline == 0)
-   call StlSetFunc("")
+   call ShowFunc#Set("")
   else
    keepjumps let swp= SaveWinPosn(0)
    exe "keepjumps ".bgnfuncline
@@ -65,7 +65,7 @@ fun! StlShowFunc_c()
 	if hw > 0
 	 let funcname= expand("<cword>")
 "	 call Decho("funcname<".funcname.">")
-	 call StlSetFunc(funcname."()")
+	 call ShowFunc#Set(funcname."()")
 	endif
    endif
    call RestoreWinPosn(swp)
@@ -77,7 +77,7 @@ endfun
 
 " ---------------------------------------------------------------------
 "  Enable FtPlugin: {{{1
-call ShowFuncSetup()
+call ShowFunc#Setup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

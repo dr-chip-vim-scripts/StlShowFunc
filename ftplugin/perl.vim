@@ -4,7 +4,7 @@
 " Version:  2e	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc")
  finish
 endif
 let b:loaded_StlShowFunc= "v2e"
@@ -55,13 +55,13 @@ fun! StlShowFunc_perl()
 "  call Decho("endprvfuncline=".endprvfuncline)
 
   if bgnfuncline < endprvfuncline || (endprvfuncline == 0 && bgnfuncline == 0)
-   call StlSetFunc("")
+   call ShowFunc#Set("")
   else
    let funcline= getline(bgnfuncline)
    if funcline =~ '^\s*sub\s*\h\w*'
    	let funcname= substitute(funcline,'^\s*sub\s*\(\h\w*\).\{-}$','\1','')
 "    call Decho("funcname<".funcname.">")
-    call StlSetFunc(funcname."()")
+    call ShowFunc#Set(funcname."()")
    endif
   endif
 
@@ -71,7 +71,7 @@ endfun
 
 " ---------------------------------------------------------------------
 "  Enable FtPlugin: {{{1
-call ShowFuncSetup()
+call ShowFunc#Setup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

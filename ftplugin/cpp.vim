@@ -4,7 +4,7 @@
 " Version:  2k	ASTRO-ONLY
 " ---------------------------------------------------------------------
 "  Don't load if main StlShowFunc isn't available: {{{1
-if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc")
  finish
 endif
 let b:loaded_StlShowFunc= "v2k"
@@ -29,13 +29,13 @@ fun! StlShowFunc_cpp()
    keepj let spline= searchpair(')\_s*\%(const\_s*\|volatile\_s*\|/\*.*\*/\_s*\|//.*\_s*\)\{,2}{','','}','bW')
 "   call Decho("spline=".spline)
    if spline <= 0
-	call StlSetFunc("")
+	call ShowFunc#Set("")
    	break
    endif
    if synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") == "Comment"
 	if line(".") == 1
 "	 call Decho("case comment in line#1:")
-     call StlSetFunc("")
+     call ShowFunc#Set("")
    	 break
 	endif
 	keepj norm! 0k
@@ -47,7 +47,7 @@ fun! StlShowFunc_cpp()
    if expand("<cword>") !~ '\<\%(if\|for\|try\|catch\|while\|switch\|else\|do\)\>'
 	let funcname= expand("<cword>")
 "	call Decho("funcname<".funcname.">")
-	call StlSetFunc(funcname."()")
+	call ShowFunc#Set(funcname."()")
 	break
    endif
   endwhile
@@ -60,7 +60,7 @@ endfun
 
 " ---------------------------------------------------------------------
 "  Enable FtPlugin: {{{1
-call ShowFuncSetup()
+call ShowFunc#Setup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1

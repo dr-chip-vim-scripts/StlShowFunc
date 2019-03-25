@@ -9,7 +9,7 @@ if &diff
 endif
 " ---------------------------------------------------------------------
 "  Load Once: {{{1
-if exists("b:loaded_StlShowFunc") || !exists("g:loaded_StlShowFunc")
+if exists("b:loaded_StlShowFunc")
  finish
 endif
 let b:loaded_StlShowFunc= "v2f"
@@ -52,7 +52,7 @@ fun! StlShowFunc_sh()
   call RestoreWinPosn(swp)
 "  call Decho("current  bgn,end[" . w:bgn_range . "," . w:end_range . "]")
 
-  call StlSetFunc( bgnfuncline ? substitute(getline(bgnfuncline), '^\s*\(\h\w*\).*$', '\1', '') : '' )
+  call ShowFunc#Set( bgnfuncline ? substitute(getline(bgnfuncline), '^\s*\(\h\w*\).*$', '\1', '') : '' )
 
   " set the status line and return
 "  call Dret("StlShowFunc_sh")
@@ -60,7 +60,7 @@ endfun
 
 " ---------------------------------------------------------------------
 "  Enable FtPlugin: {{{1
-call ShowFuncSetup()
+call ShowFunc#Setup()
 
 " ---------------------------------------------------------------------
 "  Modelines: {{{1
