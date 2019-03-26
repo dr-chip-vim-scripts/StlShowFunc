@@ -9,7 +9,7 @@ since it's author, Dr Chip - is not always responsive.
 
 Installation
 ------------
-Use whatever Vim plugin manager you want. E.g., for [vim-plug](https://github.com/junegunn/vim-plug), add this to your _vimrc_:
+Use whatever Vim plugin manager you want. E.g., for [minpac](https://github.com/k-takata/minpac), add this to your _vimrc_:
 ```vim
-Plug 'dr-chip-vim-scripts/StlShowFunc'
+call minpac#add('dr-chip-vim-scripts/StlShowFunc')
 ```
